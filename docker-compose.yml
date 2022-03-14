@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+    api:
+        build:
+            context: .
+            dockerfile: .docker/app/dockerfile
+        container_name: api.aument
+        restart: unless-stopped
+        environment:
+            COMPOSE_CONVERT_WINDOWS_PATHS: 1
+        ports:
+            - 5000:5000
+        volumes:
+            - .:/app
+            - /app/node_modules
+            - /app/.build
+        networks:
+            - default
+        depends_on:
+            - db
+
+    db:
+        image: mongo:latest
+        container_name: db.aument
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+        ports:
+            - 27017:27017
+        volumes:
+            - aument_mongo_db:/data/db
+            - ./.docker/db/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+volumes:
+    aument_mongo_db:
+        driver: local
+
+networks:
+    default:
+        name: main-aument

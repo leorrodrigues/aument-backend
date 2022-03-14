@@ -1,0 +1,4 @@
+const validToken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImFkbWluIGF1bWVudCIsInVzZXJJZCI6IjYyMmU2ZDgwZjU3YTcwZTA5ZDlmYjY2MyIsInVzZXJMb2dpbiI6ImF1bWVudCJ9.S1BuqINs6BYkgnkOv4PSW8DKGbrx-LUhTQrz8qOo5UY';
+
+export default validToken;
