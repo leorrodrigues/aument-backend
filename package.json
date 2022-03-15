@@ -44,6 +44,7 @@
     "serverless-dotenv-plugin": "3.12.2",
     "serverless-layers": "^2.5.3",
     "serverless-offline": "^8.5.0",
+    "serverless-plugin-static": "^0.0.7",
     "serverless-plugin-typescript": "^2.1.1",
     "serverless-tscpaths": "^0.0.6",
     "standard-version": "^9.3.2",

@@ -36,6 +36,7 @@ const plugins: AWS['plugins'] = [
     'serverless-plugin-typescript',
     'serverless-tscpaths',
     'serverless-layers',
+    'serverless-plugin-static',
     'serverless-offline',
     'serverless-dotenv-plugin',
 ];
@@ -52,6 +53,10 @@ const packageServerless: AWS['package'] = {
 };
 
 const custom: AWS['custom'] = {
+    static: {
+        folder: './uploads',
+        port: 8080,
+    },
     'serverless-layers': {
         packageManager: 'yarn',
     },
