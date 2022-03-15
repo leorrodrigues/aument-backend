@@ -5,7 +5,7 @@ import jwtAdapterFactory from '@/factories/adapters/jwtAdapterFactory';
 const context = async ({ req }: ExpressContext) => {
     const token = req.headers.authorization;
 
-    if (!token) {
+    if (!token || token === 'null') {
         return {};
     }
 
