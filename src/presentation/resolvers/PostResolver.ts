@@ -1,4 +1,5 @@
 import { Context } from 'apollo-server-core';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { Resolver, Query, Mutation, Arg, Ctx, Authorized } from 'type-graphql';
 
 import getCurrentUser from '@/utils/context/getCurrentUser';
@@ -35,8 +36,9 @@ class PostResolver {
     async createPost(
         @Arg('data') data: CreatePostInput,
         @Ctx() context: Context,
+        @Arg('file', () => GraphQLUpload, { nullable: true }) file?: FileUpload,
     ) {
-        return this.repository.create(data, getCurrentUser(context));
+        return this.repository.create(data, getCurrentUser(context), file);
     }
 
     @Mutation(() => PostType)
@@ -45,8 +47,9 @@ class PostResolver {
         @Arg('id', () => String) id: string,
         @Arg('data') data: UpdatePostInput,
         @Ctx() context: Context,
+        @Arg('file', () => GraphQLUpload, { nullable: true }) file?: FileUpload,
     ) {
-        return this.repository.update(id, data, getCurrentUser(context));
+        return this.repository.update(id, data, getCurrentUser(context), file);
     }
 
     @Mutation(() => Boolean)

@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax */
+import path from 'path';
 import request from 'supertest';
 import { Express } from 'express';
 
@@ -186,6 +187,64 @@ describe('Post Resolver', () => {
             });
         });
 
+        xit('Should be able to create one post with img file', async () => {
+            const createdTag = await tagRepositoryFactory().create(
+                defaultTagData,
+                'test',
+            );
+            const tagId = createdTag._id.toString();
+
+            const filePath = path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'static',
+                'testImg.jpg',
+            );
+
+            const response = await request(app)
+                .post('/graphql')
+                .set('Content-Type', 'multipart/form-data')
+                .set('Authorization', validToken)
+                .field(
+                    'operations',
+                    JSON.stringify({
+                        query: `mutation ($createPostData: CreatePostInput!, $file: Upload) {
+                            createPost(data: $createPostData, file: $file) {
+                                _id
+                                title
+                                text
+                                tag {
+                                    name
+                                }
+                            }
+                        }`,
+                        variables: {
+                            createPostData: {
+                                title: 'test create title',
+                                text: 'test create text',
+                                tagId,
+                            },
+                            file: { file: null, type: 'image/jpeg' },
+                        },
+                    }),
+                )
+                .field('map', JSON.stringify({ '0': ['variables.file'] }))
+                .attach('0', filePath);
+
+            const { status, text } = response;
+            expect(status).toBe(200);
+            const {
+                data: { createPost },
+            } = JSON.parse(text);
+
+            expect(createPost).toMatchObject({
+                title: 'test create title',
+                text: 'test create text',
+            });
+        });
+
         it('Should throw when trying to create one post without token', async () => {
             const createdTag = await tagRepositoryFactory().create(
                 defaultTagData,
@@ -269,6 +328,54 @@ describe('Post Resolver', () => {
             );
             expect(updatedPost).not.toBe(createdPosts[postIndexToUpdate]);
             expect(updatedPost).toMatchObject({ title: 'test update' });
+        });
+
+        xit('Should be able to update one post by his ID', async () => {
+            await createData();
+
+            const postIndexToUpdate = 1;
+            const createdPosts = await postRepositoryFactory().list();
+            const createdPostId =
+                createdPosts[postIndexToUpdate]._id.toString();
+
+            const filePath = path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'static',
+                'testImg.jpg',
+            );
+
+            const response = await request(app)
+                .post('/graphql')
+                .set('Content-Type', 'multipart/form-data')
+                .set('Authorization', validToken)
+                .field(
+                    'operations',
+                    JSON.stringify({
+                        query: `mutation ($updatePostData: UpdatePostInput!, $updatePostId: String!, $file: Upload) {
+                            updatePost(data: $updatePostData, id: $updatePostId, file: $file){
+                                _id
+                                title
+                                text
+                                tag {
+                                    name
+                                }
+                            }
+                        }`,
+                        variables: {
+                            updatePostId: createdPostId,
+                            updatePostData: {},
+                            file: { file: null, type: 'image/jpeg' },
+                        },
+                    }),
+                )
+                .field('map', JSON.stringify({ '0': ['variables.file'] }))
+                .attach('0', filePath);
+
+            const { status } = response;
+            expect(status).toBe(200);
         });
 
         it('Should throw when trying to update an invalid postId', async () => {

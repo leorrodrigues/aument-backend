@@ -20,7 +20,7 @@ class LocalAdapter implements Storage {
             uploadFolder,
         } = storageConfig;
 
-        this.baseUrl = 'http://localhost:5000/development/uploads';
+        this.baseUrl = 'http://localhost:8080/';
 
         if (!fs.existsSync(uploadFolder)) {
             fs.mkdirSync(uploadFolder);
