@@ -23,13 +23,7 @@ const provider: AWS['provider'] = {
         Projeto: 'aument',
         Env: '${self:provider.stage}',
     },
-    // iam: {
-    // role: '${self:custom.role.${self:custom.stage}}',
-    // },
-    // vpc: {
-    // securityGroupIds: [''],
-    // subnetIds: ['', ''],
-    // },
+    deploymentBucket: 'deployment-serverless-bucket',
 };
 
 const plugins: AWS['plugins'] = [

@@ -31,3 +31,5 @@ report-task.txt
 
 .npmrc
 .yarnrc
+
+.serverless/
