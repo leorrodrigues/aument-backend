@@ -9,13 +9,17 @@ export const buildConnections = () => {
 
     const ormConnections: OrmConnections = {};
     Object.entries(connections).forEach(([connectionName, value]) => {
-        const { HOST, PORT, USERNAME, PASSWORD, DATABASE } = value;
+        const { HOST, PORT, USERNAME, PASSWORD, DATABASE, URI } = value;
 
-        ormConnections[`${connectionName}`] = {
-            uri: `mongodb://${HOST}:${PORT}/${DATABASE}`,
-            username: USERNAME,
-            password: PASSWORD,
-        };
+        ormConnections[`${connectionName}`] = URI
+            ? {
+                  uri: URI,
+              }
+            : {
+                  uri: `mongodb://${HOST}:${PORT}/${DATABASE}`,
+                  username: USERNAME,
+                  password: PASSWORD,
+              };
     });
 
     return ormConnections;

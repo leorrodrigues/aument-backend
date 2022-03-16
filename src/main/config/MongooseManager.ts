@@ -13,13 +13,18 @@ const MongooseManager = {
         const { uri, username, password } = connectionData;
 
         console.log(`Creating connection: ${uri}`);
-        const connection = await mongoose.connect(uri, {
-            auth: {
-                username,
-                password,
-            },
-            authSource: 'admin',
-        });
+        const connection = await mongoose.connect(
+            uri,
+            username && password
+                ? {
+                      auth: {
+                          username,
+                          password,
+                      },
+                      authSource: 'admin',
+                  }
+                : undefined,
+        );
 
         this.connections[database] = connection;
     },

@@ -1,9 +1,10 @@
 export type OrmConnectionValueProps = {
-    HOST: string;
-    PORT: string;
-    USERNAME: string;
-    PASSWORD: string;
-    DATABASE: string;
+    HOST?: string;
+    PORT?: string;
+    USERNAME?: string;
+    PASSWORD?: string;
+    DATABASE?: string;
+    URI?: string;
 };
 
 export interface OrmConnectionsEnv {
@@ -13,7 +14,7 @@ export interface OrmConnectionsEnv {
 export default interface OrmConnections {
     [key: string]: {
         uri: string;
-        username: string;
-        password: string;
+        username?: string;
+        password?: string;
     };
 }
