@@ -60,16 +60,6 @@ const custom: AWS['custom'] = {
     },
     stage: '${env:NODE_ENV, "development"}',
     'default-name': '${self:service}-${self:provider.stage}',
-    role: {
-        production: '',
-        staging: '',
-        development: '',
-    },
-    endpoint: {
-        production: 'https://aument.com.br',
-        staging: 'https://homolog-aument.com.br',
-        development: '0.0.0.0',
-    },
 };
 
 const functions: AWS['functions'] = {
