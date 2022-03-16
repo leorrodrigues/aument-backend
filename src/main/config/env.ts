@@ -40,6 +40,7 @@ export default {
     PORT,
     APP_SITE_URL: process.env.APP_SITE_URL || `http://localhost:${PORT}`,
     APP_URL: process.env.APP_URL || `http://localhost:${PORT}`,
+    APP_STATIC: process.env.APP_STATIC || `http://localhost:8080`,
     JWT_SECRET: (!isCI && process.env.JWT_SECRET) || 'secret',
     CRYPTOGRAPHY_SIZE: parseInt(
         (!isCI && process.env.CRYPTOGRAPHY_SIZE) || '12',

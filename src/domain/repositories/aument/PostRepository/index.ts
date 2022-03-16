@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { FileUpload } from 'graphql-upload';
 
+import env from '@/main/config/env';
 import storageConfig from '@/main/config/storage';
 
 import PostModel from '@/domain/models/aument/Post/PostModel';
@@ -9,9 +10,9 @@ import TagModel from '@/domain/models/aument/Tag/TagModel';
 import CreatePostInput from '@/dtos/inputs/post/CreatePostInput';
 import UpdatePostInput from '@/dtos/inputs/post/UpdatePostInput';
 
-import env from '@/main/config/env';
 import NotFound from '../../errors/NotFound';
 import BadRequest from '../../errors/ BadRequest';
+import mapImageUrl from './mapImageUrl';
 
 class PostRepository {
     async create(
@@ -36,14 +37,14 @@ class PostRepository {
             imageUrl = uploadedFile[0].uploadedName;
         }
 
-        const createdUser = await PostModel.create({
+        const createdPost = await PostModel.create({
             ...data,
             tag,
             imageUrl,
             createdBy: currentUser,
         });
 
-        return createdUser;
+        return createdPost;
     }
 
     async update(
@@ -83,19 +84,29 @@ class PostRepository {
 
         post.updatedAt = dayjs().toDate();
         post.updatedBy = currentUser;
-        const updatedUser = await post.save();
+        const updatedPost = await post.save();
 
-        return updatedUser;
+        return updatedPost;
     }
 
     async get(id: string) {
         const post = await PostModel.findById(id).populate('tag');
-        return post;
+        return post ? mapImageUrl([post])[0] : null;
     }
 
     async list() {
-        const post = await PostModel.find().populate('tag');
-        return post;
+        const posts = await PostModel.find().populate('tag');
+        console.log({ posts });
+        return mapImageUrl(posts);
+    }
+
+    async listNewer() {
+        const posts = await PostModel.find()
+            .populate('tag')
+            .sort({ createdAt: 'desc' })
+            .limit(3);
+
+        return mapImageUrl(posts);
     }
 
     async delete(id: string) {

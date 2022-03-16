@@ -15,8 +15,8 @@ export default class PostType {
     @Field(() => String)
     text: string;
 
-    @Field(() => String)
-    imageUrl: string;
+    @Field(() => String, { nullable: true })
+    imageUrl?: string;
 
     @Field(() => TagType)
     tag: TagType;

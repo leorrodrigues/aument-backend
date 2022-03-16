@@ -25,6 +25,11 @@ class PostResolver {
         return this.repository.list();
     }
 
+    @Query(() => [PostType])
+    async newerPosts() {
+        return this.repository.listNewer();
+    }
+
     @Query(() => PostType, { nullable: true })
     @Authorized()
     async post(@Arg('id', () => String) id: string) {
