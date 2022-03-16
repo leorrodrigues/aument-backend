@@ -9,6 +9,7 @@ import TagModel from '@/domain/models/aument/Tag/TagModel';
 import CreatePostInput from '@/dtos/inputs/post/CreatePostInput';
 import UpdatePostInput from '@/dtos/inputs/post/UpdatePostInput';
 
+import env from '@/main/config/env';
 import NotFound from '../../errors/NotFound';
 import BadRequest from '../../errors/ BadRequest';
 
@@ -29,7 +30,7 @@ class PostRepository {
         if (file) {
             const uploadedFile = await storageConfig.store({
                 filesToUpload: [file],
-                bucket: 'local',
+                bucket: env.ENV === 'development' ? 'local' : 's3',
             });
 
             imageUrl = uploadedFile[0].uploadedName;
@@ -72,7 +73,7 @@ class PostRepository {
         if (file) {
             const uploadedFile = await storageConfig.store({
                 filesToUpload: [file],
-                bucket: 'local',
+                bucket: env.ENV === 'development' ? 'local' : 's3',
             });
 
             imageUrl = uploadedFile[0].uploadedName;
